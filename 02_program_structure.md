@@ -1,141 +1,106 @@
-# Program Structure
+# Estrutura do programa
 
 {{quote {author: "_why", title: "Why's (Poignant) Guide to Ruby", chapter: true}
 
-And my heart glows bright red under my filmy, translucent skin and they have to administer 10cc of JavaScript to get me to come back. (I respond well to toxins in the blood.) Man, that stuff will kick the peaches right out your gills!
+E meu coração brilha vermelho vivo sob minha pele fina e translúcida e eles têm que administrar 10cc de JavaScript para me trazer de volta. (Eu respondo bem a toxinas no sangue.) Cara, essa coisa vai tirar qualquer brilho que você tenha!
 
 quote}}
 
-{{index why, "Poignant Guide"}}
+{{figure {url: "img/chapter_picture_2.jpg", alt: "Ilustração exibindo um número de tentáculos segurando peças de xadrez", chapter: framed}}}
 
-{{figure {url: "img/chapter_picture_2.jpg", alt: "Illustration showing a number of tentacles holding chess pieces", chapter: framed}}}
+Neste capítulo, começaremos a fazer coisas que podem realmente ser chamadas de _programação_. Vamos expandir nosso domínio da linguagem JavaScript além dos substantivos e fragmentos de frases que vimos até agora, chegando ao ponto em que podemos expressar prosa significativa.
 
-In this chapter, we will start to do things that can actually be called _programming_. We will expand our command of the JavaScript language beyond the nouns and sentence fragments we've seen so far to the point where we can express meaningful prose.
+## Expressões e declarações
 
-## Expressions and statements
+No [Capítulo ?](values), criamos valores e aplicamos operadores a eles para obter novos valores. Criar valores dessa forma é a principal substância de qualquer programa JavaScript. Mas essa substância precisa ser enquadrada em uma estrutura maior para ser útil. É isso que vamos abordar neste capítulo.
 
-{{index grammar, [syntax, expression], [code, "structure of"], grammar, [JavaScript, syntax]}}
+Um fragmento de código que produz um valor é chamado de _expressão_. Todo valor que é escrito literalmente (como `22` ou `"psicanálise"`) é uma expressão. Uma expressão entre parênteses também é uma expressão, assim como um operador binário aplicado a duas expressões ou um operador unário aplicado a uma.
 
-In [Chapter ?](values), we made values and applied operators to them to get new values. Creating values like this is the main substance of any JavaScript program. But that substance has to be framed in a larger structure to be useful. That's what we'll cover in this chapter.
+Isso mostra parte da beleza de uma interface baseada em linguagem. As expressões podem conter outras expressões de uma maneira semelhante a como subfrases em linguagens humanas são aninhadas - uma subfrase pode conter suas próprias subfrases, e assim por diante. Isso nos permite construir expressões que descrevem computações arbitrariamente complexas.
 
-{{index "literal expression", [parentheses, expression]}}
+Se uma expressão corresponde a um fragmento de frase, uma _declaração_ JavaScript corresponde a uma frase completa. Um programa é uma lista de declarações.
 
-A fragment of code that produces a value is called an _((expression))_. Every value that is written literally (such as `22` or `"psychoanalysis"`) is an expression. An expression between parentheses is also an expression, as is a ((binary operator)) applied to two expressions or a ((unary operator)) applied to one.
-
-{{index [nesting, "of expressions"], "human language"}}
-
-This shows part of the beauty of a language-based interface. Expressions can contain other expressions in a way similar to how subsentences in human languages are nested—a subsentence can contain its own subsentences, and so on. This allows us to build expressions that describe arbitrarily complex computations.
-
-{{index statement, semicolon, program}}
-
-If an expression corresponds to a sentence fragment, a JavaScript _statement_ corresponds to a full sentence. A program is a list of statements.
-
-{{index [syntax, statement]}}
-
-The simplest kind of statement is an expression with a semicolon after it. This is a program:
+O tipo mais simples de declaração é uma expressão com um ponto e vírgula depois dela. Este é um programa:
 
 ```
 1;
 !false;
 ```
 
-It is a useless program, though. An ((expression)) can be content to just produce a value, which can then be used by the enclosing code. However, a ((statement)) stands on its own, so if it doesn't affect the world, it's useless. It may display something on the screen, as with `console.log`, or change the state of the machine in a way that will affect the statements that come after it. These changes are called _((side effect))s_. The statements in the previous example just produce the values `1` and `true` and then immediately throw them away. This leaves no impression on the world at all. When you run this program, nothing observable happens.
+Um programa inútil, no entanto. Uma expressão pode servir apenas para produzir um valor, que pode então ser usado pelo código que a envolve. No entanto, uma declaração pode existir por si só, então se ela não afetar nada, é inútil. Ela pode exibir algo na tela ou pode mudar o estado interno da máquina de uma maneira que afetará as declarações que vêm depois dela. Essas mudanças são chamadas de _efeitos colaterais_. As declarações no exemplo anterior apenas produzem os valores `1` e `true` e então os descartam imediatamente. Isso não afeta nenhuma outra declaração. Quando você executa este programa, nada observável acontece.
 
-{{index "programming style", "automatic semicolon insertion", semicolon}}
+Em alguns casos, o JavaScript permite que você omita o ponto e vírgula no final de uma declaração. Em outros casos, ele deve estar lá, ou a próxima linha será tratada como parte da mesma declaração. As regras para quando ele pode ser omitido com segurança são um tanto complexas e propensas a erros. Então neste livro, toda declaração que precisa de um ponto e vírgula sempre terá um. Eu recomendo que você faça o mesmo, pelo menos até que tenha aprendido mais sobre as sutilezas de ponto e vírgulas ausentes.
 
-In some cases, JavaScript allows you to omit the semicolon at the end of a statement. In other cases, it has to be there, or the next ((line)) will be treated as part of the same statement. The rules for when it can be safely omitted are somewhat complex and error prone. So in this book, every statement that needs a semicolon will always get one. I recommend you do the same, at least until you've learned more about the subtleties of missing semicolons.
+## Variáveis
 
-## Bindings
-
-{{indexsee variable, binding}}
-{{index [syntax, statement], [binding, definition], "side effect", [memory, organization], [state, in binding]}}
-
-How does a program keep an internal state? How does it remember things? We have seen how to produce new values from old values, but this does not change the old values, and the new value must be used immediately or it will dissipate again. To catch and hold values, JavaScript provides a thing called a _binding_, or _variable_.
+Como um programa mantém um estado interno? Como ele se lembra das coisas? Vimos como produzir novos valores a partir de valores antigos, mas isso não altera os valores antigos, e o novo valor deve ser usado imediatamente ou se dissipará novamente. Para capturar e manter valores, o JavaScript fornece algo chamado _variável_.
 
 ```
-let caught = 5 * 5;
+let capturado = 5 * 5;
 ```
 
-{{index "let keyword"}}
+Isso nos dá um segundo tipo de declaração. A palavra especial (palavra-chave) `let` indica que esta frase vai definir uma variável. É seguida pelo nome da variável e, se quisermos dar-lhe imediatamente um valor, por um operador `=` e uma expressão.
 
-That gives us a second kind of ((statement)). The special word (_((keyword))_) `let` indicates that this sentence is going to define a binding. It is followed by the name of the binding and, if we want to immediately give it a value, by an `=` operator and an expression.
+A declaração acima cria uma variável chamada `capturado` e a usa para capturar o número que é produzido multiplicando 5 por 5.
 
-The example creates a binding called `caught` and uses it to grab hold of the number that is produced by multiplying 5 by 5.
-
-After a binding has been defined, its name can be used as an ((expression)). The value of such an expression is the value the binding currently holds. Here's an example:
+Depois que uma variável foi definida, seu nome pode ser usado como uma expressão. O valor de tal expressão é o valor que a variável mantém atualmente. Aqui está um exemplo:
 
 ```
-let ten = 10;
-console.log(ten * ten);
+let dez = 10;
+console.log(dez * dez);
 // → 100
 ```
 
-{{index "= operator", assignment, [binding, assignment]}}
-
-When a binding points at a value, that does not mean it is tied to that value forever. The `=` operator can be used at any time on existing bindings to disconnect them from their current value and have them point to a new one:
+Quando uma variável aponta para um valor, isso não significa que está ligada a esse valor para sempre. O operador `=` pode ser usado a qualquer momento em variáveis existentes para desconectá-las de seu valor atual e fazê-las apontar para um novo:
 
 ```
-let mood = "light";
-console.log(mood);
-// → light
-mood = "dark";
-console.log(mood);
-// → dark
+let tema = "claro";
+console.log(tema);
+// → claro
+tema = "escuro";
+console.log(tema);
+// → escuro
 ```
 
-{{index [binding, "model of"], "tentacle (analogy)"}}
+Você deve imaginar as variáveis como tentáculos, em vez de caixas. Elas não _contêm_ valores; elas os _capturam_ - duas variáveis podem se referir ao mesmo valor. Um programa pode acessar apenas os valores aos quais ainda tem uma referência. Quando você precisa lembrar de algo, você cria um tentáculo para segurá-lo ou reconecta um de seus tentáculos existentes a ele.
 
-You should imagine bindings as tentacles rather than boxes. They do not _contain_ values; they _grasp_ them—two bindings can refer to the same value. A program can access only the values to which it still has a reference. When you need to remember something, you either grow a tentacle to hold on to it or reattach one of your existing tentacles to it.
-
-Let's look at another example. To remember the number of dollars that Luigi still owes you, you create a binding. When he pays back $35, you give this binding a new value.
+Vamos olhar outro exemplo. Para lembrar o número de dólares que Luigi ainda lhe deve, você cria uma variável. Quando ele paga $35, você dá a essa variável um novo valor.
 
 ```
-let luigisDebt = 140;
-luigisDebt = luigisDebt - 35;
-console.log(luigisDebt);
+let dividaDeLuigi = 140;
+dividaDeLuigi = dividaDeLuigi - 35;
+console.log(dividaDeLuigi);
 // → 105
 ```
 
-{{index undefined}}
+Quando você define uma variável sem dar a ela um valor, o tentáculo não tem nada para agarrar, então termina no ar vazio. Se você pedir o valor de uma variável vazia, você obterá o valor `undefined`.
 
-When you define a binding without giving it a value, the tentacle has nothing to grasp, so it ends in thin air. If you ask for the value of an empty binding, you'll get the value `undefined`.
-
-{{index "let keyword"}}
-
-A single `let` statement may define multiple bindings. The definitions must be separated by commas:
+Uma única declaração `let` pode definir múltiplas variáveis. As definições devem ser separadas por vírgulas:
 
 ```
-let one = 1, two = 2;
-console.log(one + two);
+let um = 1, dois = 2;
+console.log(um + dois);
 // → 3
 ```
 
-The words `var` and `const` can also be used to create bindings, in a similar fashion to `let`.
+As palavras `var` e `const` também podem ser usadas para criar variáveis, de maneira similar a `let`.
 
 ```
-var name = "Ayda";
-const greeting = "Hello ";
-console.log(greeting + name);
+var nome = "Ayda";
+const saudacao = "Olá ";
+console.log(saudacao + nome);
 // → Hello Ayda
 ```
 
-{{index "var keyword"}}
+A primeira delas, `var` (abreviação de "variável"), era a forma como as variáveis eram declaradas no JavaScript pré-2015, quando `let` ainda não existia. Voltarei à maneira precisa como ela difere de `let` no [próximo capítulo](functions). Por enquanto, lembre-se de que ela faz basicamente a mesma coisa, mas raramente a usaremos neste livro porque se comporta de maneira estranha em algumas situações.
 
-The first of these, `var` (short for "variable"), is the way bindings were declared in pre-2015 JavaScript, when `let` didn't exist yet. I'll get back to the precise way it differs from `let` in the [next chapter](functions). For now, remember that it mostly does the same thing, but we'll rarely use it in this book because it behaves oddly in some situations.
+A palavra `const` significa _constante_. Ela define uma variável constante, que aponta para o mesmo valor enquanto existir. Isso é útil para variáveis que dão um nome a um valor para que você possa se referir a ele facilmente mais tarde.
 
-{{index "const keyword", naming}}
+## Nomes de variáveis
 
-The word `const` stands for _((constant))_. It defines a constant binding, which points at the same value for as long as it lives. This is useful for bindings that just give a name to a value so that you can easily refer to it later.
+Os nomes de variáveis podem ser qualquer palavra. Dígitos podem fazer parte de nomes de variáveis - `captura22` é um nome válido, por exemplo - mas o nome não deve começar com um dígito. Um nome de variável pode incluir cifrões (`$`) ou sublinhados (`_`) mas nenhuma outra pontuação ou caracteres especiais.
 
-## Binding names
-
-{{index "underscore character", "dollar sign", [binding, naming]}}
-
-Binding names can be any sequence of one or more letters. Digits can be part of binding names—`catch22` is a valid name, for example—but the name must not start with a digit. A binding name may include dollar signs (`$`) or underscores (`_`) but no other punctuation or special characters.
-
-{{index [syntax, identifier], "implements (reserved word)", "interface (reserved word)", "package (reserved word)", "private (reserved word)", "protected (reserved word)", "public (reserved word)", "static (reserved word)", "void operator", "yield (reserved word)", "enum (reserved word)", "reserved word", [binding, naming]}}
-
-Words with a special meaning, such as `let`, are _((keyword))s_, and may not be used as binding names. There are also a number of words that are "reserved for use" in ((future)) versions of JavaScript, which also can't be used as binding names. The full list of keywords and reserved words is rather long:
+Palavras com um significado especial, como `let`, são _palavras-chave_, e não podem ser usadas como nomes de variáveis. Há também uma série de palavras que são "reservadas para uso" em versões futuras do JavaScript, que também não podem ser usadas como nomes de variáveis. A lista completa de palavras-chave e palavras reservadas é bastante longa:
 
 ```{lang: "null"}
 break case catch class const continue debugger default
@@ -145,181 +110,142 @@ new package private protected public return static super
 switch this throw true try typeof var void while with yield
 ```
 
-{{index [syntax, error]}}
+Não se preocupe em memorizar esta lista. Quando a criação de uma variável produzir um erro de sintaxe inesperado, verifique se você está tentando definir uma palavra reservada.
 
-Don't worry about memorizing this list. When creating a binding produces an unexpected syntax error, check whether you're trying to define a reserved word.
+## O ambiente
 
-## The environment
+A coleção de variáveis e seus valores que existem em um dado momento é chamada de _ambiente_. Quando um programa inicia, este ambiente não está vazio. Ele sempre contém variáveis que fazem parte do padrão da linguagem, e na maioria das vezes, também tem variáveis que fornecem maneiras de interagir com o sistema ao redor. Por exemplo, em um navegador, existem funções para interagir com o site atualmente carregado e para ler entradas do mouse e do teclado.
 
-{{index "standard environment", [browser, environment]}}
+## Funções
 
-The collection of bindings and their values that exist at a given time is called the _((environment))_. When a program starts up, this environment is not empty. It always contains bindings that are part of the language ((standard)), and most of the time, it also has bindings that provide ways to interact with the surrounding system. For example, in a browser, there are functions to interact with the currently loaded website and to read ((mouse)) and ((keyboard)) input.
-
-## Functions
-
-{{indexsee "application (of functions)", [function, application]}}
-{{indexsee "invoking (of functions)", [function, application]}}
-{{indexsee "calling (of functions)", [function, application]}}
-{{index output, function, [function, application], [browser, environment]}}
-
-A lot of the values provided in the default environment have the type _((function))_. A function is a piece of program wrapped in a value. Such values can be _applied_ in order to run the wrapped program. For example, in a browser environment, the binding `prompt` holds a function that shows a little ((dialog)) asking for user input. It is used like this:
+Muitos dos valores fornecidos no ambiente padrão são do tipo _função_. Uma função é um pedaço de programa envolvido em um valor. Tais valores podem ser _aplicados_ para executar o programa envolvido. Por exemplo, em um ambiente de navegador, a variável `prompt` contém uma função que mostra uma pequena caixa de diálogo pedindo uma entrada do usuário. Ela é usada assim:
 
 ```
 prompt("Enter passcode");
 ```
 
-{{figure {url: "img/prompt.png", alt: "A prompt dialog that says 'enter passcode'", width: "8cm"}}}
+{{figure {url: "img/prompt.png", alt: "Uma caixa de diálogo com a mensagem 'enter passcode'", width: "8cm"}}}
 
-{{index parameter, [function, application], [parentheses, arguments]}}
+Executar uma função é chamado de _invocar_, _chamar_ ou _aplicar_ ela. Você pode chamar uma função colocando parênteses após uma expressão que produza um valor de função. Geralmente você usará diretamente o nome da variável que contém a função. Os valores entre parênteses são dados ao programa dentro da função. No exemplo, a função `prompt` usa a string que fornecemos como o texto a ser mostrado na caixa de diálogo. Valores dados a funções são chamados de _argumentos_. Diferentes funções podem precisar de um número diferente ou de tipos diferentes de argumentos.
 
-Executing a function is called _invoking_, _calling_, or _applying_ it. You can call a function by putting parentheses after an expression that produces a function value. Usually you'll directly use the name of the binding that holds the function. The values between the parentheses are given to the program inside the function. In the example, the `prompt` function uses the string that we give it as the text to show in the dialog box. Values given to functions are called _((argument))s_. Different functions might need a different number or different types of arguments.
+A função `prompt` não é muito usada na programação web moderna, principalmente porque você não tem controle sobre a aparência da caixa de diálogo resultante, mas pode ser útil em programas e experimentos simples.
 
-The `prompt` function isn't used much in modern web programming, mostly because you have no control over the way the resulting dialog looks, but it can be helpful in toy programs and experiments.
+## A função console.log
 
-## The console.log function
-
-{{index "JavaScript console", "developer tools", "Node.js", "console.log", output, [browser, environment]}}
-
-In the examples, I used `console.log` to output values. Most JavaScript systems (including all modern web browsers and Node.js) provide a `console.log` function that writes out its arguments to _some_ text output device. In browsers, the output lands in the ((JavaScript console)). This part of the browser interface is hidden by default, but most browsers open it when you press F12 or, on a Mac, [command]{keyname}-[option]{keyname}-I. If that does not work, search through the menus for an item named Developer Tools or similar.
+Nos exemplos, usei `console.log` para exibir valores. A maioria dos sistemas JavaScript (incluindo todos os navegadores modernos e Node.js) fornecem uma função `console.log` que escreve seus argumentos em _algum_ dispositivo de saída de texto. Nos navegadores, a saída vai para o console JavaScript. Esta parte da interface do navegador está oculta por padrão, mas a maioria dos navegadores a abre quando você pressiona F12 ou, em um Mac, [command]{keyname}-[option]{keyname}-I. Se isso não funcionar, procure através dos menus por um item chamado Developer Tools ou similar.
 
 {{if interactive
 
-When running the examples (or your own code) on the pages of this book, `console.log` output will be shown after the example, instead of in the browser's JavaScript console.
+Ao executar os exemplos (ou seu próprio código) nas páginas deste livro, a saída de `console.log` será mostrada após o exemplo, em vez de no console JavaScript do navegador.
 
 ```
 let x = 30;
-console.log("the value of x is", x);
-// → the value of x is 30
+console.log("o valor de x é", x);
+// → o valor de x é 30
 ```
 
 if}}
 
-{{index [object, property], [property, access]}}
+Embora os nomes de variáveis não possam conter pontos, `console.log` tem um. Isso porque `console.log` não é uma simples variável, mas na verdade uma expressão que recupera a propriedade `log` do valor mantido pela variável `console`. Descobriremos exatamente o que isso significa no [Capítulo ?](data#properties).
 
-Though binding names cannot contain ((period character))s, `console.log` does have one. This is because `console.log` isn't a simple binding, but an expression that retrieves the `log` property from the value held by the `console` binding. We'll find out exactly what this means in [Chapter ?](data#properties).
+## Valores de retorno
 
-{{id return_values}}
-## Return values
-
-{{index [comparison, "of numbers"], "return value", "Math.max function", maximum}}
-
-Showing a dialog box or writing text to the screen is a _((side effect))_. Many functions are useful because of the side effects they produce. Functions may also produce values, in which case they don't need to have a side effect to be useful. For example, the function `Math.max` takes any amount of number arguments and gives back the greatest.
+Mostrar uma caixa de diálogo ou escrever texto na tela é um _efeito colateral_. Muitas funções são úteis por causa dos efeitos colaterais que produzem. As funções também podem produzir valores, nesse caso, elas não precisam ter um efeito colateral para serem úteis. Por exemplo, a função `Math.max` recebe qualquer quantidade de argumentos numéricos e retorna o maior.
 
 ```
 console.log(Math.max(2, 4));
 // → 4
 ```
 
-{{index [function, application], minimum, "Math.min function"}}
-
-When a function produces a value, it is said to _return_ that value. Anything that produces a value is an ((expression)) in JavaScript, which means that function calls can be used within larger expressions. In the following code, a call to `Math.min`, which is the opposite of `Math.max`, is used as part of a plus expression:
+Quando uma função produz um valor, diz-se que ela _retorna_ esse valor. Qualquer coisa que produza um valor é uma expressão em JavaScript, o que significa que chamadas de função podem ser usadas dentro de expressões maiores. No código a seguir, uma chamada para `Math.min`, que é o oposto de `Math.max`, é usada como parte de uma expressão de adição:
 
 ```
 console.log(Math.min(2, 4) + 100);
 // → 102
 ```
 
-[Chapter ?](functions) will explain how to write your own functions.
+O [Capítulo ?](functions) explicará como escrever suas próprias funções.
 
-## Control flow
+## Fluxo de controle
 
-{{index "execution order", program, "control flow"}}
-
-When your program contains more than one ((statement)), the statements are executed as though they were a story, from top to bottom. For example, the following program has two statements. The first asks the user for a number, and the second, which is executed after the first, shows the ((square)) of that number:
+Quando seu programa contém mais de uma declaração, as declarações são executadas como se fossem uma história, de cima para baixo. Este programa de exemplo tem duas declarações. A primeira pergunta ao usuário por um número, e a segunda, que é executada depois da primeira, mostra o quadrado desse número:
 
 ```
-let theNumber = Number(prompt("Pick a number"));
-console.log("Your number is the square root of " +
-            theNumber * theNumber);
+let oNumero = Number(prompt("Escolha um número"));
+console.log("Seu número ao quadrado é " +
+            oNumero * oNumero);
 ```
 
-{{index [number, "conversion to"], "type coercion", "Number function", "String function", "Boolean function", [Boolean, "conversion to"]}}
+A função `Number` converte um valor para um número. Precisamos dessa conversão porque o resultado de `prompt` é um valor de string, e queremos um número. Existem funções similares chamadas `String` e `Boolean` que convertem valores para esses tipos.
 
-The function `Number` converts a value to a number. We need that conversion because the result of `prompt` is a string value, and we want a number. There are similar functions called `String` and `Boolean` that convert values to those types.
+Aqui está a representação esquemática bastante trivial do fluxo de controle em linha reta:
 
-Here is the rather trivial schematic representation of straight-line control flow:
+{{figure {url: "img/controlflow-straight.svg", alt: "Diagrama mostrando uma seta reta", width: "4cm"}}}
 
-{{figure {url: "img/controlflow-straight.svg", alt: "Diagram showing a straight arrow", width: "4cm"}}}
+## Execução condicional
 
-## Conditional execution
+Nem todos os programas são estradas retas. Podemos, por exemplo, querer criar um caminho ramificado, onde o programa toma o ramo adequado com base na situação em questão. Isso é chamado de _execução condicional_.
 
-{{index Boolean, ["control flow", conditional]}}
+{{figure {url: "img/controlflow-if.svg", alt: "Diagrama mostrando uma seta que se divide em duas e depois se junta novamente",width: "4cm"}}}
 
-Not all programs are straight roads. We may, for example, want to create a branching road where the program takes the proper branch based on the situation at hand. This is called _((conditional execution))_.
-
-{{figure {url: "img/controlflow-if.svg", alt: "Diagram of an arrow that splits in two, and then rejoins again",width: "4cm"}}}
-
-{{index [syntax, statement], "Number function", "if keyword"}}
-
-Conditional execution is created with the `if` keyword in JavaScript. In the simple case, we want some code to be executed if, and only if, a certain condition holds. We might, for example, want to show the square of the input only if the input is actually a number:
+A execução condicional é criada em JavaScript com a palavra-chave `if`. No caso mais simples, queremos que algum código seja executado se, e somente se, uma certa condição for verdadeira. Podemos, por exemplo, querer mostrar o quadrado da entrada apenas se ela for realmente um número:
 
 ```{test: wrap}
-let theNumber = Number(prompt("Pick a number"));
-if (!Number.isNaN(theNumber)) {
-  console.log("Your number is the square root of " +
+let oNumero = Number(prompt("Escolha um número"));
+if (!Number.isNaN(oNumero)) {
+  console.log("O quadrado do seu número é: " +
               theNumber * theNumber);
 }
 ```
 
-With this modification, if you enter "parrot", no output is shown.
+Com essa modificação, se você inserir "papagaio", nenhuma saída será mostrada.
 
-{{index [parentheses, statement]}}
+A palavra-chave `if` executa ou pula uma declaração dependendo do valor de uma expressão booleana. A expressão decisiva é escrita após a palavra-chave, entre parênteses, seguida pela declaração a ser executada.
 
-The `if` keyword executes or skips a statement depending on the value of a Boolean expression. The deciding expression is written after the keyword, between parentheses, followed by the statement to execute.
+A função `Number.isNaN` é uma função padrão do JavaScript que retorna `true` apenas se o argumento que lhe é dado for `NaN`. A função `Number` retorna `NaN` quando você lhe dá uma string que não representa um número válido. Assim, a condição se traduz para "a menos que `oNumero` não seja um número, faça isto".
 
-{{index "Number.isNaN function"}}
-
-The `Number.isNaN` function is a standard JavaScript function that returns `true` only if the argument it is given is `NaN`. The `Number` function happens to return `NaN` when you give it a string that doesn't represent a valid number. Thus, the condition translates to "unless `theNumber` is not-a-number, do this".
-
-{{index grouping, "{} (block)", [braces, "block"]}}
-
-The statement after the `if` is wrapped in braces (`{` and `}`) in this example. The braces can be used to group any number of statements into a single statement, called a _((block))_. You could also have omitted them in this case, since they hold only a single statement, but to avoid having to think about whether they are needed, most JavaScript programmers use them in every wrapped statement like this. We'll mostly follow that convention in this book, except for the occasional one-liner.
+A declaração após o `if` está envolvida em chaves (`{` e `}`) neste exemplo. As chaves podem ser usadas para agrupar qualquer número de declarações em uma única declaração, chamada de _bloco_. Você também poderia tê-las omitido neste caso, já que elas contêm apenas uma única declaração, mas para evitar ter que pensar sobre quando elas são necessárias, a maioria dos programadores JavaScript as usa em toda declaração envolvida como esta. Seguiremos principalmente essa convenção neste livro, exceto por algumas linhas de código curtas.
 
 ```
-if (1 + 1 == 2) console.log("It's true");
-// → It's true
+if (1 + 1 == 2) console.log("É verdade");
+// → É verdade
 ```
 
-{{index "else keyword"}}
-
-You often won't just have code that executes when a condition holds true, but also code that handles the other case. This alternate path is represented by the second arrow in the diagram. You can use the `else` keyword, together with `if`, to create two separate, alternative execution paths:
+Muitas vezes você não terá apenas código que executa quando uma condição é verdadeira, mas também código que lida com o outro caso. Este caminho alternativo é representado pela segunda seta no diagrama. Você pode usar a palavra-chave `else`, junto com `if`, para criar dois caminhos de execução separados e alternativos:
 
 ```{test: wrap}
-let theNumber = Number(prompt("Pick a number"));
-if (!Number.isNaN(theNumber)) {
-  console.log("Your number is the square root of " +
-              theNumber * theNumber);
+let oNumero = Number(prompt("Escolha um número"));
+if (!Number.isNaN(oNumero)) {
+  console.log("O quadrado do seu número é: " +
+              oNumero * oNumero);
 } else {
-  console.log("Hey. Why didn't you give me a number?");
+  console.log("Ei. Por que você não me deu um número?");
 }
 ```
 
-{{index ["if keyword", chaining]}}
-
-If you have more than two paths to choose from, you can "chain" multiple `if`/`else` pairs together. Here's an example:
+Se você tiver mais de dois caminhos para escolher, você pode "encadear" múltiplos pares `if`/`else` juntos. Aqui está um exemplo:
 
 ```
-let num = Number(prompt("Pick a number"));
+let num = Number(prompt("Escolha um número"));
 
 if (num < 10) {
-  console.log("Small");
+  console.log("Pequeno");
 } else if (num < 100) {
-  console.log("Medium");
+  console.log("Médio");
 } else {
-  console.log("Large");
+  console.log("Grande");
 }
 ```
 
-The program will first check whether `num` is less than 10. If it is, it chooses that branch, shows `"Small"`, and is done. If it isn't, it takes the `else` branch, which itself contains a second `if`. If the second condition (`< 100`) holds, that means the number is at least 10 but below 100, and `"Medium"` is shown. If it doesn't, the second and last `else` branch is chosen.
+O programa primeiro verificará se `num` é menor que 10. Se for, ele escolhe esse ramo, mostra "Pequeno" e termina. Se não for, ele toma o ramo `else`, que contém um segundo `if`. Se a segunda condição (< 100) for verdadeira, significa que o número está entre 10 e 100, e "Médio" é mostrado. Se não for, o segundo e último ramo `else` é escolhido.
 
-The schema for this program looks something like this:
+O esquema para este programa se parece com algo assim:
 
-{{figure {url: "img/controlflow-nested-if.svg", alt: "Diagram showing arrow that splits in two, with on the branches splitting again, before all branches rejoin again", width: "4cm"}}}
+{{figure {url: "img/controlflow-nested-if.svg", alt: "Diagrama mostrando uma seta que se divide em duas, com um dos ramos se dividindo novamente, antes de todos os ramos se juntarem novamente", width: "4cm"}}}
 
-{{id loops}}
-## while and do loops
+## Loops while e do
 
-Consider a program that outputs all ((even number))s from 0 to 12. One way to write this is as follows:
+Considere um programa que imprime todos os números pares de 0 a 12. Uma maneira de escrever isso é assim:
 
 ```
 console.log(0);
@@ -331,313 +257,255 @@ console.log(10);
 console.log(12);
 ```
 
-{{index ["control flow", loop]}}
+Isso funciona, mas a ideia de escrever um programa é fazer algo _menos_ trabalhoso, não mais. Se precisássemos de todos os números pares menores que 1.000, essa abordagem seria inviável. O que precisamos é de uma maneira de executar um pedaço de código várias vezes. Essa forma de fluxo de controle é chamada de _loop_.
 
-That works, but the idea of writing a program is to make something _less_ work, not more. If we needed all even numbers less than 1,000, this approach would be unworkable. What we need is a way to run a piece of code multiple times. This form of control flow is called a _((loop))_.
+{{figure {url: "img/controlflow-loop.svg", alt: "Diagrama mostrando uma seta para um ponto que tem uma seta cíclica voltando para si mesmo e outra seta indo adiante", width: "4cm"}}}
 
-{{figure {url: "img/controlflow-loop.svg", alt: "Diagram showing an arrow to a point which has a cyclic arrow going back to itself and another arrow going further", width: "4cm"}}}
-
-{{index [syntax, statement], "counter variable"}}
-
-Looping control flow allows us to go back to some point in the program where we were before and repeat it with our current program state. If we combine this with a binding that counts, we can do something like this:
+O fluxo de controle em loop nos permite voltar a algum ponto no programa onde estávamos antes e repeti-lo com nosso estado de programa atual. Se combinarmos isso com uma variável que conta números, podemos fazer algo assim:
 
 ```
-let number = 0;
-while (number <= 12) {
-  console.log(number);
-  number = number + 2;
+let numero = 0;
+while (numero <= 12) {
+  console.log(numero);
+  numero = numero + 2;
 }
 // → 0
 // → 2
 //   … etcetera
 ```
 
-{{index "while loop", Boolean, [parentheses, statement]}}
+Uma declaração começando com a palavra-chave `while` cria um loop. A palavra `while` é seguida por uma expressão entre parênteses e então uma declaração, muito parecido com `if`. O loop continua entrando nessa declaração enquanto a expressão produzir um valor que dê `true` quando convertido para booleano.
 
-A ((statement)) starting with the keyword `while` creates a loop. The word `while` is followed by an ((expression)) in parentheses and then a statement, much like `if`. The loop keeps entering that statement as long as the expression produces a value that gives `true` when converted to Boolean.
+A variável `numero` demonstra a maneira como uma variável pode acompanhar o progresso de um programa. Cada vez que o loop se repete, `numero` recebe um valor que é 2 a mais que seu valor anterior. No início de cada repetição, ele é comparado com o número 12 para decidir se o trabalho do programa está terminado.
 
-{{index [state, in binding], [binding, as state]}}
-
-The `number` binding demonstrates the way a ((binding)) can track the progress of a program. Every time the loop repeats, `number` gets a value that is 2 more than its previous value. At the beginning of every repetition, it is compared with the number 12 to decide whether the program's work is finished.
-
-{{index exponentiation}}
-
-As an example that actually does something useful, we can now write a program that calculates and shows the value of 2^10^ (2 to the 10th power). We use two bindings: one to keep track of our result and one to count how often we have multiplied this result by 2. The loop tests whether the second binding has reached 10 yet and, if not, updates both bindings.
+Como um exemplo que realmente faz algo útil, podemos agora escrever um programa que calcula e mostra o valor de 2^10^ (2 elevado à 10ª potência). Usamos duas variáveis: uma para manter o controle de nosso resultado e uma para contar quantas vezes multiplicamos este resultado por 2. O loop testa se a segunda variável já chegou a 10 e, se não, atualiza ambas as variáveis.
 
 ```
-let result = 1;
-let counter = 0;
-while (counter < 10) {
-  result = result * 2;
-  counter = counter + 1;
+let resultado = 1;
+let contador = 0;
+while (contador < 10) {
+  resultado = resultado * 2;
+  contador = contador + 1;
 }
-console.log(result);
+console.log(resultado);
 // → 1024
 ```
 
-The counter could also have started at `1` and checked for `<= 10`, but for reasons that will become apparent in [Chapter ?](data#array_indexing), it is a good idea to get used to counting from 0.
+O contador poderia também ter começado em `1` e verificado por `<= 10`, mas por razões que se tornarão aparentes no [Capítulo ?](data#array_indexing), é uma boa ideia se acostumar a contar a partir de 0.
 
-{{index "** operator"}}
+Note que o JavaScript também tem um operador para exponenciação (`2 ** 10`), que você usaria para calcular isso em código real — mas isso teria arruinado o exemplo.
 
-Note that JavaScript also has an operator for exponentiation (`2 ** 10`), which you would use to compute this in real code—but that would have ruined the example.
-
-{{index "loop body", "do loop", ["control flow", loop]}}
-
-A `do` loop is a control structure similar to a `while` loop. It differs only on one point: a `do` loop always executes its body at least once, and it starts testing whether it should stop only after that first execution. To reflect this, the test appears after the body of the loop:
+Um loop `do` é uma estrutura de controle similar a um loop `while`. Ele difere apenas em um ponto: um loop `do` sempre executa seu corpo pelo menos uma vez, e começa a testar se deve parar apenas após essa primeira execução. Para refletir isso, o teste aparece após o corpo do loop:
 
 ```
-let yourName;
+let seuNome;
 do {
-  yourName = prompt("Who are you?");
-} while (!yourName);
-console.log("Hello " + yourName);
+  seuNome = prompt("Quem é você?");
+} while (!seuNome);
+console.log("Olá " + seuNome);
 ```
 
-{{index [Boolean, "conversion to"], "! operator"}}
+Este programa forçará você a inserir um nome. Ele perguntará repetidamente até obter algo que não seja uma string vazia. Aplicar o operador `!` converterá um valor para o tipo booleano antes de negá-lo, e todas as strings exceto `""` convertem para `true`. Isso significa que o loop continua girando até que você forneça um nome não vazio.
 
-This program will force you to enter a name. It will ask again and again until it gets something that is not an empty string. Applying the `!` operator will convert a value to Boolean type before negating it, and all strings except `""` convert to `true`. This means the loop continues going round until you provide a non-empty name.
+## Indentando Código
 
-## Indenting Code
+Nos exemplos, tenho adicionado espaços antes das declarações que fazem parte de alguma declaração maior. Esses espaços não são necessários — o computador aceitará o programa muito bem sem eles. De fato, até mesmo as quebras de linha nos programas são opcionais. Você poderia escrever um programa como uma única linha longa se quisesse.
 
-{{index [code, "structure of"], [whitespace, indentation], "programming style"}}
-
-In the examples, I've been adding spaces in front of statements that are part of some larger statement. These spaces are not required—the computer will accept the program just fine without them. In fact, even the ((line)) breaks in programs are optional. You could write a program as a single long line if you felt like it.
-
-The role of this ((indentation)) inside ((block))s is to make the structure of the code stand out to human readers. In code where new blocks are opened inside other blocks, it can become hard to see where one block ends and another begins. With proper indentation, the visual shape of a program corresponds to the shape of the blocks inside it. I like to use two spaces for every open block, but tastes differ—some people use four spaces, and some people use ((tab character))s. The important thing is that each new block adds the same amount of space.
+O papel desta indentação dentro dos blocos é fazer com que a estrutura do código se destaque para leitores humanos. Em código onde novos blocos são abertos dentro de outros blocos, pode se tornar difícil ver onde um bloco termina e outro começa. Com a indentação adequada, a forma visual de um programa corresponde à forma dos blocos dentro dele. Eu gosto de usar dois espaços para cada bloco aberto, mas os gostos diferem — algumas pessoas usam quatro espaços, e algumas pessoas usam caracteres de tabulação. O importante é que cada novo bloco adicione a mesma quantidade de espaço.
 
 ```
 if (false != true) {
-  console.log("That makes sense.");
+  console.log("Isso faz sentido.");
   if (1 < 2) {
-    console.log("No surprise there.");
+    console.log("Nenhuma surpresa aqui.");
   }
 }
 ```
 
-Most code ((editor)) programs[ (including the one in this book)]{if interactive} will help by automatically indenting new lines the proper amount.
+A maioria dos programas editores de código (incluindo o deste livro) ajudará indentando automaticamente as novas linhas na quantidade apropriada.
 
-## for loops
+## Loops for
 
-{{index [syntax, statement], "while loop", "counter variable"}}
+Muitos loops seguem o padrão mostrado nos exemplos `while`. Primeiro uma variável "contadora" é criada para acompanhar o progresso do loop. Então vem um loop `while`, geralmente com uma expressão de teste que verifica se o contador atingiu seu valor final. No final do corpo do loop, o contador é atualizado para acompanhar o progresso.
 
-Many loops follow the pattern shown in the `while` examples. First a "counter" binding is created to track the progress of the loop. Then comes a `while` loop, usually with a test expression that checks whether the counter has reached its end value. At the end of the loop body, the counter is updated to track progress.
-
-{{index "for loop", loop}}
-
-Because this pattern is so common, JavaScript and similar languages provide a slightly shorter and more comprehensive form, the `for` loop:
-
+Como esse padrão é tão comum, JavaScript e linguagens similares fornecem uma forma um pouco mais curta e mais abrangente, o loop `for`:
 ```
-for (let number = 0; number <= 12; number = number + 2) {
-  console.log(number);
+for (let numero = 0; numero <= 12; numero = numero + 2) {
+  console.log(numero);
 }
 // → 0
 // → 2
 //   … etcetera
 ```
 
-{{index ["control flow", loop], state}}
+Este programa é exatamente equivalente ao exemplo [anterior](program_structure#loops) de impressão de números pares. A única mudança é que todas as declarações que estão relacionadas ao "estado" do loop estão agrupadas depois de `for`.
 
-This program is exactly equivalent to the [earlier](program_structure#loops) even-number-printing example. The only change is that all the ((statement))s that are related to the "state" of the loop are grouped together after `for`.
+Os parênteses após uma palavra-chave `for` devem conter dois pontos e vírgulas. A parte antes do primeiro ponto e vírgula _inicializa_ o loop, geralmente definindo uma variável. A segunda parte é a expressão que _verifica_ se o loop deve continuar. A parte final _atualiza_ o estado do loop após cada iteração. Na maioria dos casos, isso é mais curto e mais claro do que uma construção `while`.
 
-{{index [binding, as state], [parentheses, statement]}}
-
-The parentheses after a `for` keyword must contain two ((semicolon))s. The part before the first semicolon _initializes_ the loop, usually by defining a binding. The second part is the ((expression)) that _checks_ whether the loop must continue. The final part _updates_ the state of the loop after every iteration. In most cases, this is shorter and clearer than a `while` construct.
-
-{{index exponentiation}}
-
-This is the code that computes 2^10^ using `for` instead of `while`:
+Este é o código que calcula 2^10^ usando `for` em vez de `while`:
 
 ```{test: wrap}
-let result = 1;
-for (let counter = 0; counter < 10; counter = counter + 1) {
-  result = result * 2;
+let resultado = 1;
+for (let contador = 0; contador < 10; contador = contador + 1) {
+  resultado = resultado * 2;
 }
-console.log(result);
+console.log(resultado);
 // → 1024
 ```
 
-## Breaking Out of a Loop
+## Saindo de um Loop
 
-{{index [loop, "termination of"], "break keyword"}}
+Ter a condição do loop produzir `false` não é a única maneira de um loop terminar. Existe uma declaração especial chamada `break` que tem o efeito de imediatamente pular para fora do loop envolvente.
 
-Having the looping condition produce `false` is not the only way a loop can finish. The `break` statement has the effect of immediately jumping out of the enclosing loop. Its use is demonstrated in the following program, which finds the first number that is both greater than or equal to 20 and divisible by 7:
+Este programa ilustra o uso da declaração `break`. Ele encontra o primeiro número que é tanto maior ou igual a 20 quanto divisível por 7.
 
 ```
-for (let current = 20; ; current = current + 1) {
-  if (current % 7 == 0) {
-    console.log(current);
+for (let atual = 20; ; atual = atual + 1) {
+  if (atual % 7 == 0) {
+    console.log(atual);
     break;
   }
 }
 // → 21
 ```
 
-{{index "remainder operator", "% operator"}}
+Usar o operador resto (`%`) é uma maneira fácil de testar se um número é divisível por outro número. Se for, o resto da divisão deles é zero.
 
-Using the remainder (`%`) operator is an easy way to test whether a number is divisible by another number. If it is, the remainder of their division is zero.
+A construção `for` neste exemplo não tem uma parte que verifica o fim do loop. Isso significa que o loop nunca parará a menos que a declaração `break` dentro dele seja executada.
 
-{{index "for loop"}}
-
-The `for` construct in the example does not have a part that checks for the end of the loop. This means that the loop will never stop unless the `break` statement inside is executed.
-
-If you were to remove that `break` statement or you accidentally write an end condition that always produces `true`, your program would get stuck in an _((infinite loop))_. A program stuck in an infinite loop will never finish running, which is usually a bad thing.
+Se você remover essa declaração `break` ou acidentalmente escrever uma condição que sempre produza `true`, seu programa ficará preso em um _loop infinito_. Um programa preso em um loop infinito nunca terminará de rodar, o que geralmente é uma coisa ruim.
 
 {{if interactive
 
-If you create an infinite loop in one of the examples on these pages, you'll usually be asked whether you want to stop the script after a few seconds. If that fails, you will have to close the tab that you're working in to recover.
+Se você criar um loop infinito em um dos exemplos nestas páginas, geralmente será perguntado se você quer parar o script após alguns segundos. Se isso falhar, você terá que fechar a aba em questão para recuperar.
 
 if}}
 
-{{index "continue keyword"}}
+A palavra-chave `continue` é similar ao `break`, no sentido de que influencia o progresso de um loop. Quando `continue` é encontrado no corpo de um loop, o controle pula para fora do corpo e continua com a próxima iteração do loop.
 
-The `continue` keyword is similar to `break` in that it influences the progress of a loop. When `continue` is encountered in a loop body, control jumps out of the body and continues with the loop's next iteration.
+## Atualizando variáveis sucintamente
 
-## Updating bindings succinctly
-
-{{index assignment, "+= operator", "-= operator", "/= operator", "*= operator", [state, in binding], "side effect"}}
-
-Especially when looping, a program often needs to "update" a binding to hold a value based on that binding's previous value.
+Especialmente ao fazer loops, um programa frequentemente precisa "atualizar" uma variável para manter um valor baseado no valor anterior dessa variável.
 
 ```{test: no}
-counter = counter + 1;
+contador = contador + 1;
 ```
 
-JavaScript provides a shortcut for this:
+JavaScript fornece um atalho para isso:
 
 ```{test: no}
-counter += 1;
+contador += 1;
 ```
 
-Similar shortcuts work for many other operators, such as `result *= 2` to double `result` or `counter -= 1` to count downward.
+Atalhos similares funcionam para muitos outros operadores, como `resultado *= 2` para dobrar `resultado` ou `contador -= 1` para contar para trás.
 
-This allows us to further shorten our counting example:
+Isso nos permite encurtar nosso exemplo de contagem um pouco mais:
 
 ```
-for (let number = 0; number <= 12; number += 2) {
-  console.log(number);
+for (let numero = 0; numero <= 12; numero += 2) {
+  console.log(numero);
 }
 ```
 
-{{index "++ operator", "-- operator"}}
+Para `contador += 1` e `contador -= 1`, existem equivalentes ainda mais curtos: `contador++` e `contador--`.
 
-For `counter += 1` and `counter -= 1`, there are even shorter equivalents: `counter++` and `counter--`.
+## Desencadeando com base em um valor usando `switch`
 
-## Dispatching on a value with switch
-
-{{index [syntax, statement], "conditional execution", dispatch, ["if keyword", chaining]}}
-
-It is not uncommon for code to look like this:
+Não é incomum que o código se pareça com isto:
 
 ```{test: no}
-if (x == "value1") action1();
-else if (x == "value2") action2();
-else if (x == "value3") action3();
-else defaultAction();
+if (x == "valor1") acao1();
+else if (x == "valor2") acao2();
+else if (x == "valor3") acao3();
+else acaoPadrao();
 ```
 
-{{index "colon character", "switch keyword"}}
-
-There is a construct called `switch` that is intended to express such a "dispatch" in a more direct way. Unfortunately, the syntax JavaScript uses for this (which it inherited from the C/Java line of programming languages) is somewhat awkward—a chain of `if` statements may look better. Here is an example:
+Existe uma construção chamada `switch` que é destinada a expressar tal "desencadeamento" de uma maneira mais direta. Infelizmente, a sintaxe que JavaScript usa para isso (que herdou da linha de linguagens de programação C/Java) é um pouco estranha — uma cadeia de declarações `if` pode parecer melhor. Aqui está um exemplo:
 
 ```
-switch (prompt("What is the weather like?")) {
-  case "rainy":
-    console.log("Remember to bring an umbrella.");
+switch (prompt("Como está o tempo?")) {
+  case "chuvoso":
+    console.log("Lembre-se de levar um guarda-chuva.");
     break;
-  case "sunny":
-    console.log("Dress lightly.");
-  case "cloudy":
-    console.log("Go outside.");
+  case "ensolarado":
+    console.log("Vista-se com roupas leves.");
+  case "nublado":
+    console.log("Vai dar um passeio.");
     break;
   default:
-    console.log("Unknown weather type!");
+    console.log("Tipo de tempo desconhecido!");
     break;
 }
 ```
 
-{{index fallthrough, "break keyword", "case keyword", "default keyword"}}
+Você pode colocar qualquer número de rótulos `case` dentro do bloco aberto por `switch`. O programa começará a ser executado a partir do rótulo que corresponde ao valor fornecido ao `switch`, ou em `default` se nenhum valor correspondente for encontrado. Ele continuará executando, mesmo através de outros rótulos, até encontrar uma declaração `break`. Em alguns casos, como no caso `"ensolarado"` no exemplo, isso pode ser usado para compartilhar algum código entre casos (ele recomenda ir lá fora tanto para tempo ensolarado quanto nublado). Mas cuidado — é fácil esquecer tal `break`, o que fará com que o programa execute código que você não quer que seja executado.
 
-You may put any number of `case` labels inside the block opened by `switch`. The program will start executing at the label that corresponds to the value that `switch` was given, or at `default` if no matching value is found. It will continue executing, even across other labels, until it reaches a `break` statement. In some cases, such as the `"sunny"` case in the example, this can be used to share some code between cases (it recommends going outside for both sunny and cloudy weather). Be careful, though—it is easy to forget such a `break`, which will cause the program to execute code you do not want executed.
+## Capitalização
 
-## Capitalization
-
-{{index capitalization, [binding, naming], [whitespace, syntax]}}
-
-Binding names may not contain spaces, yet it is often helpful to use multiple words to clearly describe what the binding represents. These are pretty much your choices for writing a binding name with several words in it:
+Nomes de variáveis não podem conter espaços, mas muitas vezes é útil usar várias palavras para descrever claramente o que a variável representa. Estas são basicamente suas escolhas para escrever um nome de variável com várias palavras nele:
 
 ```{lang: null}
+tartarugapeluda
+tartaruga_peluda
+TartarugaPeluda
+tartarugaPeluda
 fuzzylittleturtle
 fuzzy_little_turtle
 FuzzyLittleTurtle
 fuzzyLittleTurtle
 ```
 
-{{index "camel case", "programming style", "underscore character"}}
+O primeiro estilo pode ser difícil de ler. Eu gosto bastante da aparência dos sublinhados, embora esse estilo seja um pouco doloroso de digitar. As funções padrão do JavaScript, e a maioria dos programadores JavaScript, seguem o último estilo — eles capitalizam toda palavra, exceto a primeira. Não é difícil se acostumar com pequenas coisas como essa, e código com estilos de nomenclatura mistos pode ser irritante de ler, então seguimos esta convenção.
 
-The first style can be hard to read. I rather like the look of the underscores, though that style is a little painful to type. The ((standard)) JavaScript functions, and most JavaScript programmers, follow the final style—they capitalize every word except the first. It is not hard to get used to little things like that, and code with mixed naming styles can be jarring to read, so we follow this ((convention)).
+Em alguns casos, como na função `Number`, a primeira letra de uma variável também é capitalizada. Isso foi feito para marcar esta função como um construtor. O que é um construtor ficará claro no [Capítulo ?](object#constructors). Por enquanto, o importante é não se incomodar com esta - aparente - falta de consistência.
 
-{{index "Number function", constructor}}
+## Comentários
 
-In a few cases, such as the `Number` function, the first letter of a binding is also capitalized. This was done to mark this function as a constructor. It will become clear what a constructor is in [Chapter ?](object#constructors). For now, the important thing is to not be bothered by this apparent lack of ((consistency)).
+Frequentemente, o código bruto não transmite todas as informações que você quer que um programa transmita aos leitores humanos, ou ele transmite de uma maneira tão confusa que as pessoas podem não entender. Em outros momentos, você pode simplesmente querer incluir alguns pensamentos relacionados como parte do seu programa. É para isso que servem os _comentários_.
 
-## Comments
-
-{{index readability}}
-
-Often, raw code does not convey all the information you want a program to convey to human readers, or it conveys it in such a cryptic way that people might not understand it. At other times, you might just want to include some related thoughts as part of your program. This is what _((comment))s_ are for.
-
-{{index "slash character", "line comment"}}
-
-A comment is a piece of text that is part of a program but is completely ignored by the computer. JavaScript has two ways of writing comments. To write a single-line comment, you can use two slash characters (`//`) and then the comment text after it:
+Um comentário é um pedaço de texto que faz parte de um programa, mas é completamente ignorado pelo computador. JavaScript tem duas maneiras de escrever comentários. Para escrever um comentário de uma linha, você pode usar dois caracteres de barra (`//`) e então o texto do comentário após ele:
 
 ```{test: no}
-let accountBalance = calculateBalance(account);
-// It's a green hollow where a river sings
-accountBalance.adjust();
-// Madly catching white tatters in the grass.
-let report = new Report();
-// Where the sun on the proud mountain rings:
-addToReport(accountBalance, report);
-// It's a little valley, foaming like light in a glass.
+let saldoDaConta = calcularSaldo(conta);
+// É um vale verde onde um rio canta
+saldoDaConta.ajustar();
+// Pegando loucamente farrapos brancos na grama.
+let relatorio = new Relatorio();
+// Onde o sol no orgulhoso monte ressoa:
+adicionarAoRelatorio(saldoDaConta, relatorio);
+// É um pequeno vale, espumando como luz em um copo.
 ```
 
-{{index "block comment"}}
-
-A `//` comment goes only to the end of the line. A section of text between `/*` and `*/` will be ignored in its entirety, regardless of whether it contains line breaks. This is useful for adding blocks of information about a file or a chunk of program:
+Um comentário `//` vai apenas até o final da linha. Uma seção de texto entre `/*` e `*/` será ignorada inteiramente, independentemente de conter quebras de linha. Isso é útil para adicionar blocos de informação sobre um arquivo ou um pedaço de programa:
 
 ```
 /*
-  I first found this number scrawled on the back of an old
-  notebook. Since then, it has often dropped by, showing up in
-  phone numbers and the serial numbers of products that I've
-  bought. It obviously likes me, so I've decided to keep it.
+  Eu encontrei este número pela primeira vez rabiscado no verso de um
+  caderno velho. Desde então, ele tem aparecido frequentemente, surgindo
+  em números de telefone e números de série de produtos que comprei.
+  Obviamente ele gosta de mim, então decidi mantê-lo.
 */
-const myNumber = 11213;
+const meuNumero = 11213;
 ```
 
-## Summary
+## Resumo
+Agora você sabe que um programa é construído a partir de declarações, que às vezes contêm mais declarações. Declarações tendem a conter expressões, que por sua vez podem ser construídas a partir de expressões menores.
 
-You now know that a program is built out of statements, which themselves sometimes contain more statements. Statements tend to contain expressions, which themselves can be built out of smaller expressions.
+Colocar declarações uma após a outra dá a você um programa que é executado de cima para baixo. Você pode introduzir perturbações no fluxo de controle usando declarações condicionais (`if`, `else` e `switch`) e loops (`while`, `do` e `for`).
 
-Putting statements after one another gives you a program that is executed from top to bottom. You can introduce disturbances in the flow of control by using conditional (`if`, `else`, and `switch`) and looping (`while`, `do`, and `for`) statements.
+variáveis podem ser usadas para arquivar pedaços de dados sob um nome, e são úteis para rastrear o estado em seu programa. O ambiente é o conjunto de variáveis que são definidas. Os sistemas JavaScript sempre colocam um número de variáveis padrão úteis em seu ambiente.
 
-Bindings can be used to file pieces of data under a name, and they are useful for tracking state in your program. The environment is the set of bindings that are defined. JavaScript systems always put a number of useful standard bindings into your environment.
+Funções são valores especiais que encapsulam um pedaço de programa. Você pode invocá-las escrevendo `nomeDaFuncao(argumento1, argumento2)`. Tal chamada de função é uma expressão e pode produzir um valor.
 
-Functions are special values that encapsulate a piece of program. You can invoke them by writing `functionName(argument1, argument2)`. Such a function call is an expression and may produce a value.
+## Exercícios
 
-## Exercises
+Se você não tem certeza de como testar suas soluções para os exercícios, consulte a introdução.
 
-{{index exercises}}
+Cada exercício começa com uma descrição do problema. Leia esta descrição e tente resolver o exercício. Se você encontrar problemas, considere ler as dicas após o exercício. Você pode encontrar soluções completas para os exercícios online em https://eloquentjavascript.net/code#2. Se você quer aprender algo com os exercícios, recomendo olhar as soluções somente depois de ter resolvido o exercício, ou pelo menos depois de ter trabalhado nele por tempo suficiente para ter uma leve dor de cabeça.
 
-If you are unsure how to test your solutions to the exercises, refer to the [introduction](intro).
+### Fazendo um triângulo com loop
 
-Each exercise starts with a problem description. Read this description and try to solve the exercise. If you run into problems, consider reading the hints [after the exercise]{if interactive}[at the [end of the book](hints)]{if book}. You can find full solutions to the exercises online at [_https://eloquentjavascript.net/code_](https://eloquentjavascript.net/code#2). If you want to learn something from the exercises, I recommend looking at the solutions only after you've solved the exercise, or at least after you've attacked it long and hard enough to have a slight headache.
-
-### Looping a triangle
-
-{{index "triangle (exercise)"}}
-
-Write a ((loop)) that makes seven calls to `console.log` to output the following triangle:
+Escreva um loop que faça sete chamadas a `console.log` para gerar o seguinte triângulo:
 
 ```{lang: null}
 #
@@ -649,9 +517,7 @@ Write a ((loop)) that makes seven calls to `console.log` to output the following
 #######
 ```
 
-{{index [string, length]}}
-
-It may be useful to know that you can find the length of a string by writing `.length` after it.
+Uma maneira interessante para saber o comprimento de uma string é escrevendo .length após ela.
 
 ```
 let abc = "abc";
@@ -661,60 +527,50 @@ console.log(abc.length);
 
 {{if interactive
 
-Most exercises contain a piece of code that you can modify to solve the exercise. Remember that you can click code blocks to edit them.
+A maioria dos exercícios contém um pedaço de código que pode ser utilizada para alterar e resolver o exercício. Lembre-se que você pode clicar em um bloco de código para editá-lo.
 
 ```
-// Your code here.
+// Seu código aqui.
 ```
 if}}
 
 {{hint
 
-{{index "triangle (exercise)"}}
+Você pode começar com um programa que simplesmente imprime os números de 1 a 7, na qual você pode derivar algumas modificações no [exemplo de impressão de números dado no início do capítulo aqui](program_structure#loops), onde o loop `for` foi introduzido.
 
-You can start with a program that prints out the numbers 1 to 7, which you can derive by making a few modifications to the [even number printing example](program_structure#loops) given earlier in the chapter, where the `for` loop was introduced.
-
-Now consider the equivalence between numbers and strings of hash characters. You can go from 1 to 2 by adding 1 (`+= 1`). You can go from `"#"` to `"##"` by adding a character (`+= "#"`). Thus, your solution can closely follow the number-printing program.
+Agora, considere a equivalência entre números e cadeias em um hash de caracteres. Você pode ir de 1 para 2 adicionando 1 (+ = 1). Você pode ir de "#" para "##", adicionando um caractere (+ = "#"). Assim, a solução pode acompanhar de perto o número, de impressão do programa.
 
 hint}}
 
 ### FizzBuzz
 
-{{index "FizzBuzz (exercise)", loop, "conditional execution"}}
+Escreva um programa que imprima usando `console.log()` todos os números de 1 a 100 com duas exceções. Para números divisíveis por 3, imprima `Fizz` ao invés do número, e para números divisíveis por 5 (e não 3), imprima `Buzz`.
 
-Write a program that uses `console.log` to print all the numbers from 1 to 100, with two exceptions. For numbers divisible by 3, print `"Fizz"` instead of the number, and for numbers divisible by 5 (and not 3), print `"Buzz"` instead.
+Quando o programa estiver funcionando, modifique-o para imprimir `FizzBuzz` para números que são divisíveis ambos por 3 e 5 (e continue imprimindo `Fizz` e `Buzz` para números divisíveis por apenas um deles).
 
-When you have that working, modify your program to print `"FizzBuzz"` for numbers that are divisible by both 3 and 5 (and still print `"Fizz"` or `"Buzz"` for numbers divisible by only one of those).
-
-(This is actually an ((interview question)) that has been claimed to weed out a significant percentage of programmer candidates. So if you solved it, your labor market value just went up.)
+(Isto é na verdade uma pergunta de entrevista usada para eliminar uma porcentagem significativa de candidatos programadores. Então se você resolvê-la, você está autorizado de se sentir bem consigo mesmo).
 
 {{if interactive
 ```
-// Your code here.
+// Seu código aqui
 ```
 if}}
 
 {{hint
 
-{{index "FizzBuzz (exercise)", "remainder operator", "% operator"}}
+Interar sobre os números é trabalho claro de um loop, e selecionar o que imprimir é uma questão de execução condicional. Lembre-se do truque de usar o operador restante (%) para verificar se um número é divisível por outro número (terá zero de resto).
 
-Going over the numbers is clearly a looping job, and selecting what to print is a matter of conditional execution. Remember the trick of using the remainder (`%`) operator for checking whether a number is divisible by another number (has a remainder of zero).
+Na primeira versão, existem três resultados possíveis para cada número, então você irá criar uma cadeia de `if`/`else if`/`else`.
 
-In the first version, there are three possible outcomes for every number, so you'll have to create an `if`/`else if`/`else` chain.
-
-{{index "|| operator", ["if keyword", chaining]}}
-
-The second version of the program has a straightforward solution and a clever one. The simple solution is to add another conditional "branch" to precisely test the given condition. For the clever solution, build up a string containing the word or words to output and print either this word or the number if there is no word, potentially by making good use of the `||` operator.
+Na segunda versão o programa tem uma solução simples e uma inteligente. A maneira mais simples é adicionar um outro "ramo" para um teste preciso da condição dada. Para o método inteligente é construir uma sequência de caracteres contendo palavra ou palavras para a saída, que imprima a palavra ou o número, caso não haja palavra, fazendo o uso do operador elegante `||`.
 
 hint}}
 
-### Chessboard
+### Tabuleiro de xadrez
 
-{{index "chessboard (exercise)", loop, [nesting, "of loops"], "newline character"}}
+Escreva um programa que cria uma string que representa uma grade 8x8, usando novas linhas para separar os caracteres. A cada posição da grade existe um espaço ou um caractere "#". Esses caracteres formam um tabuleiro de xadrez.
 
-Write a program that creates a string that represents an 8×8 grid, using newline characters to separate lines. At each position of the grid there is either a space or a "#" character. The characters should form a chessboard.
-
-Passing this string to `console.log` should show something like this:
+Passando esta string para o console.log deve mostrar algo como isto:
 
 ```{lang: null}
  # # # #
@@ -727,28 +583,24 @@ Passing this string to `console.log` should show something like this:
 # # # # 
 ```
 
-When you have a program that generates this pattern, define a binding `size = 8` and change the program so that it works for any `size`, outputting a grid of the given width and height.
+Quando você tiver o programa que gere este padrão, defina a variável `tamanho = 8` e altere programa para que ele funcione para qualquer `tamanho`, a saída da grade de largura e altura.
 
 {{if interactive
 ```
-// Your code here.
+// Seu código aqui
 ```
 if}}
 
 {{hint
 
-{{index "chess board (exercise)"}}
+A sequência pode ser construída iniciando vazia (`""`) e repetidamente adicionando caracateres. O caracter para uma nova linha é escrito assim `\n`.
 
-You can build the string by starting with an empty one (`""`) and repeatedly adding characters. A newline character is written `"\n"`.
+Utilize console.log para visualizar a saída do seu programa.
 
-{{index [nesting, "of loops"], [braces, "block"]}}
+Para trabalhar com duas dimensões, você irá precisar de um loop dentro de outro loop. Coloque entre chaves os "corpos" dos loops para se tornar mais fácil de visualizar quando inicia e quando termina. Tente recuar adequadamente esses "corpos". A ordem dos loops deve seguir a ordem que usamos para construir a string (linha por linha, esquerda para direita, cima para baixo). Então o loop mais externo manipula as linhas e o loop interno manipula os caracteres por linha.
 
-To work with two ((dimensions)), you will need a ((loop)) inside of a loop. Put braces around the bodies of both loops to make it easy to see where they start and end. Try to properly indent these bodies. The order of the loops must follow the order in which we build up the string (line by line, left to right, top to bottom). So the outer loop handles the lines, and the inner loop handles the characters on a line.
+Você vai precisar de duas variáveis para acompanhar seu progresso. Para saber se coloca um espaço ou um `"#"` em uma determinada posição, você pode testar se a soma dos dois contadores ainda é divisível por (`% 2`).
 
-{{index "counter variable", "remainder operator", "% operator"}}
-
-You'll need two bindings to track your progress. To know whether to put a space or a hash sign at a given position, you could test whether the sum of the two counters is even (`% 2`).
-
-Terminating a line by adding a newline character must happen after the line has been built up, so do this after the inner loop but inside the outer loop.
+Encerrando uma linha com um caracter de nova linha acontece após a linha de cima ser construída, faça isso após o loop interno, mas dentro do loop externo.
 
 hint}}
